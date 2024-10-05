@@ -1,3 +1,3 @@
 # practica-7
 
-Practica
+Practica 1
