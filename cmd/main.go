@@ -27,7 +27,11 @@ func main() {
 		})
 	})
 	router.GET("/", func(c *gin.Context) {
-		c.HTML(200, "index.html", gin.H{})
+		c.HTML(200, "index.html", gin.H{
+			"title":       "Main website",
+			"total_users": len(users),
+			"users":       users,
+		})
 	})
 	// API URLs
 	//Obtener usuarios
@@ -70,6 +74,34 @@ func main() {
 		}
 		c.JSON(201, gin.H{})
 	})
-
+	//ACtualizar usuarios
+	router.PUT("/api/users/:id", func(c *gin.Context) {
+		id := c.Param("id")
+		idParsed, err := strconv.Atoi(id)
+		if err != nil {
+			c.JSON(400, gin.H{
+				"error": "Invalid id",
+			})
+			return
+		}
+		var user User
+		err = c.BindJSON(&user)
+		if err != nil {
+			c.JSON(400, gin.H{
+				"error": "Invalid payload",
+			})
+			return
+		}
+		fmt.Println("Id a actualizar: ", id)
+		for i, u := range users {
+			if u.Id == idParsed {
+				users[i] = user
+				users[i].Id = idParsed
+				c.JSON(200, users[i])
+				return
+			}
+		}
+		c.JSON(201, gin.H{})
+	})
 	router.Run(":8001")
 }
