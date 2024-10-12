@@ -30,7 +30,7 @@ func main() {
 		c.HTML(200, "index.html", gin.H{
 			"title":       "Main website",
 			"total_users": len(users),
-			"users":       users,
+			"users":       []User{},
 		})
 	})
 	// API URLs
